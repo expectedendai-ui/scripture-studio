@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scripture Studio — Scripture inside the creative workflow</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">✦</span>
+    <span class="brand-name">Scripture Studio</span>
+    <span class="brand-sub">a New Frontiers demo</span>
+  </div>
+  <div class="powered">powered by <b>YouVersion Platform</b> + <b>Gloo AI Studio</b></div>
+</header>
+
+<main class="studio">
+
+  <!-- Left: the conversation -->
+  <section class="chat-panel">
+    <div class="thread" id="thread">
+      <div class="msg assistant">
+        <p>Hey! I'm your studio companion. Tell me what you're making — a post, a card, a slide, a story — and I'll find the Scripture that belongs in it. ✦</p>
+      </div>
+      <div class="starters" id="starters">
+        <button class="chip" data-intent="an encouraging Instagram post for a friend fighting anxiety">Encouraging post</button>
+        <button class="chip" data-intent="a graduation congratulations card with a verse about new beginnings">Graduation card</button>
+        <button class="chip" data-intent="a workout story about perseverance and not giving up">Fitness story</button>
+        <button class="chip" data-intent="a sermon slide about hope for a youth night on identity">Sermon slide</button>
+      </div>
+    </div>
+
+    <div class="composer">
+      <select id="translation" title="Translation">
+        <option value="WEB" selected>WEB</option>
+        <option value="KJV">KJV</option>
+      </select>
+      <textarea id="input" rows="1" placeholder="Tell me what you're creating…"></textarea>
+      <button id="send" class="send" title="Send">✦</button>
+    </div>
+  </section>
+
+  <!-- Right: the canvas gallery -->
+  <section class="canvas-wrap">
+    <div class="canvas" id="canvas">
+      <div class="canvas-empty" id="empty">
+        <span>✦</span>
+        <p>Your verse cards land here as we talk</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  Built for the Scripture in New Frontiers challenge · demo styled after the MyBibleLens sanctuary aesthetic
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

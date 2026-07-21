@@ -1,0 +1,6 @@
+{
+  // Scripture Studio API proxy — deploy with: npx wrangler deploy
+  "name": "scripture-studio-proxy",
+  "main": "proxy.js",
+  "compatibility_date": "2026-07-01"
+}
