@@ -101,22 +101,22 @@ function downloadPNG(passage, composed) {
   const x = c.getContext("2d");
 
   const g = x.createRadialGradient(W * 0.3, H * 0.2, 80, W / 2, H / 2, H);
-  g.addColorStop(0, "#fdf8ea"); g.addColorStop(1, "#f3ead6");
+  g.addColorStop(0, "#fff8f3"); g.addColorStop(1, "#f7ede2");
   x.fillStyle = g; x.fillRect(0, 0, W, H);
 
-  x.fillStyle = "#C58310"; x.font = "64px Georgia";
+  x.fillStyle = "#b6741d"; x.font = "64px Georgia";
   x.textAlign = "center"; x.fillText("✦", W / 2, 170);
 
-  x.fillStyle = "#2b2118"; x.font = "italic 52px Georgia";
+  x.fillStyle = "#1a1a1a"; x.font = "italic 52px Lora, Georgia";
   const bottom = wrapText(x, `“${passage.text}”`, W / 2, 300, W - 240, 74);
 
-  x.fillStyle = "#7a5206"; x.font = "bold 34px Avenir Next, Helvetica";
+  x.fillStyle = "#8f5916"; x.font = "bold 34px Inter, Helvetica";
   x.fillText(`${passage.reference.toUpperCase()} · ${passage.version}`, W / 2, bottom + 80);
 
-  x.fillStyle = "#6b5a44"; x.font = "italic 30px Georgia";
+  x.fillStyle = "#6b5a44"; x.font = "italic 30px Lora, Georgia";
   wrapText(x, composed.caption || "", W / 2, bottom + 150, W - 300, 44);
 
-  x.fillStyle = "#b6a888"; x.font = "22px Avenir Next, Helvetica";
+  x.fillStyle = "#b6a888"; x.font = "22px Inter, Helvetica";
   x.fillText("Scripture via YouVersion · composed with Gloo AI", W / 2, H - 60);
 
   const a = document.createElement("a");
