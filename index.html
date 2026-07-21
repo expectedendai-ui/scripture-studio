@@ -35,8 +35,25 @@
 
     <div class="composer">
       <select id="translation" title="Translation">
-        <option value="WEB" selected>WEB</option>
-        <option value="KJV">KJV</option>
+        <optgroup label="English">
+          <option value="BSB" selected>BSB</option>
+          <option value="ENGWEBUS">WEB</option>
+          <option value="ASV">ASV</option>
+          <option value="FBV">FBV</option>
+        </optgroup>
+        <optgroup label="Español">
+          <option value="RVES">RVES</option>
+          <option value="VBL">VBL</option>
+        </optgroup>
+        <optgroup label="Français">
+          <option value="LSG">LSG</option>
+        </optgroup>
+        <optgroup label="Português">
+          <option value="BLT">BLT</option>
+        </optgroup>
+        <optgroup label="中文">
+          <option value="CSBS">CSBS</option>
+        </optgroup>
       </select>
       <textarea id="input" rows="1" placeholder="Tell me what you're creating…"></textarea>
       <button id="send" class="send" title="Send">✦</button>

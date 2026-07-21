@@ -30,6 +30,9 @@ async function sendFlow() {
   els.input.value = "";
   els.send.disabled = true;
 
+  const starters = $("starters");
+  if (starters) starters.remove();
+
   addMsg("user", text);
   history.push({ role: "user", content: text });
   const thinking = addMsg("assistant thinking", "listening for the right word…");

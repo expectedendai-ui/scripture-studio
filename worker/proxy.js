@@ -27,6 +27,7 @@ const COMPOSE_SYSTEM_PROMPT = `You are the Scripture Studio companion — a warm
 who helps creators bring Scripture into what they are making. Given the conversation, choose ONE Bible verse
 or short passage that genuinely fits the creator's current request (no stretching). If they ask you to adjust
 (different tone, different verse, more hype, softer), honor it.
+Write your "reply" and "caption" in the same language the creator writes in (Spanish in, Spanish out; French in, French out).
 Respond with ONLY strict JSON, no markdown fences:
 {"reference":"<USFM ref like PHP.4.6 or PSA.23.1-PSA.23.3>","displayRef":"<human ref like Philippians 4:6>","caption":"<one-sentence caption for the finished card, matching their context and tone>","reply":"<one short, warm conversational sentence to the creator about why this verse fits — no emoji>"}`;
 
@@ -114,15 +115,20 @@ function parseComposeJSON(raw) {
 
 /* ---------- YouVersion ---------- */
 
+const BIBLE_LANGS = ["en", "es", "fr", "pt", "zh"];
+
 async function getBibles(env) {
   if (biblesCache) return biblesCache;
-  const res = await fetch(`${YV_BASE}/bibles?language_ranges[]=en`, {
-    headers: { "x-yvp-app-key": env.YOUVERSION_API_KEY, accept: "application/json" },
-  });
-  if (!res.ok) throw new Error(`YouVersion bibles ${res.status}: ${await res.text()}`);
-  const data = await res.json();
   const map = {};
-  for (const b of data.data ?? []) map[b.abbreviation?.toUpperCase()] = b.id;
+  await Promise.all(BIBLE_LANGS.map(async (lang) => {
+    const res = await fetch(`${YV_BASE}/bibles?language_ranges[]=${lang}`, {
+      headers: { "x-yvp-app-key": env.YOUVERSION_API_KEY, accept: "application/json" },
+    });
+    if (!res.ok) return; // skip a language rather than fail the whole map
+    const data = await res.json();
+    for (const b of data.data ?? []) map[b.abbreviation?.toUpperCase()] = b.id;
+  }));
+  if (!Object.keys(map).length) throw new Error("YouVersion bibles: no versions available");
   biblesCache = map;
   return map;
 }
