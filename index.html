@@ -3,77 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Scripture Studio — Scripture inside the creative workflow</title>
+<title>Scripture Studio — Scripture in your living landscape</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+<!-- Top bar -->
 <header class="topbar">
   <div class="brand">
     <span class="brand-mark">✦</span>
     <span class="brand-name">Scripture Studio</span>
-    <span class="brand-sub">a New Frontiers demo</span>
+    <span class="brand-sub">Infinite Canvas · a MyBibleLens demo</span>
   </div>
-  <div class="powered">powered by <b>YouVersion Platform</b> + <b>Gloo AI Studio</b></div>
+  <div class="topbar-right">
+    <select id="translation" class="lang" title="Translation">
+      <optgroup label="English">
+        <option value="BSB" selected>BSB</option>
+        <option value="ENGWEBUS">WEB</option>
+        <option value="ASV">ASV</option>
+      </optgroup>
+      <optgroup label="Español"><option value="RVES">RVES</option></optgroup>
+      <optgroup label="Français"><option value="LSG">LSG</option></optgroup>
+      <optgroup label="Português"><option value="BLT">BLT</option></optgroup>
+      <optgroup label="中文"><option value="CSBS">CSBS</option></optgroup>
+    </select>
+    <span class="powered">powered by <b>YouVersion</b> + <b>Gloo AI</b></span>
+  </div>
 </header>
 
-<main class="studio">
-
-  <!-- Left: the conversation -->
-  <section class="chat-panel">
-    <div class="thread" id="thread">
-      <div class="msg assistant">
-        <p>Hey! I'm your studio companion. Tell me what you're making — a post, a card, a slide, a story — and I'll find the Scripture that belongs in it. ✦</p>
-      </div>
-      <div class="starters" id="starters">
-        <button class="chip" data-intent="an encouraging Instagram post for a friend fighting anxiety">Encouraging post</button>
-        <button class="chip" data-intent="a graduation congratulations card with a verse about new beginnings">Graduation card</button>
-        <button class="chip" data-intent="a workout story about perseverance and not giving up">Fitness story</button>
-        <button class="chip" data-intent="a sermon slide about hope for a youth night on identity">Sermon slide</button>
-      </div>
-    </div>
-
-    <div class="composer">
-      <select id="translation" title="Translation">
-        <optgroup label="English">
-          <option value="BSB" selected>BSB</option>
-          <option value="ENGWEBUS">WEB</option>
-          <option value="ASV">ASV</option>
-          <option value="FBV">FBV</option>
-        </optgroup>
-        <optgroup label="Español">
-          <option value="RVES">RVES</option>
-          <option value="VBL">VBL</option>
-        </optgroup>
-        <optgroup label="Français">
-          <option value="LSG">LSG</option>
-        </optgroup>
-        <optgroup label="Português">
-          <option value="BLT">BLT</option>
-        </optgroup>
-        <optgroup label="中文">
-          <option value="CSBS">CSBS</option>
-        </optgroup>
-      </select>
-      <textarea id="input" rows="1" placeholder="Tell me what you're creating…"></textarea>
-      <button id="send" class="send" title="Send">✦</button>
-    </div>
-  </section>
-
-  <!-- Right: the canvas gallery -->
-  <section class="canvas-wrap">
-    <div class="canvas" id="canvas">
-      <div class="canvas-empty" id="empty">
-        <span>✦</span>
-        <p>Your verse cards land here as we talk</p>
-      </div>
-    </div>
-  </section>
-
+<!-- The living landscape canvas -->
+<main class="canvas" id="canvas">
+  <div class="canvas-hint" id="canvasHint">
+    <span class="hint-mark">✦</span>
+    <p>This is your Infinite Canvas — a living landscape.</p>
+    <p class="hint-sub">Tap <b>✦ Compose</b> below and speak a moment. Scripture will land right here, where you're already creating.</p>
+  </div>
 </main>
 
-<footer class="foot">
-  Built for the Scripture in New Frontiers challenge · demo styled after the MyBibleLens sanctuary aesthetic
+<!-- Compose button -->
+<button class="compose-fab" id="composeFab">
+  <span class="fab-mark">✦</span> Compose
+</button>
+
+<!-- Compose sheet (the doorway) -->
+<section class="sheet" id="sheet" hidden>
+  <div class="sheet-head">
+    <div>
+      <h2>Compose with Scripture</h2>
+      <p>Tell me what you're creating — I'll find the Word that belongs in it, and drop it on your canvas.</p>
+    </div>
+    <button class="sheet-close" id="sheetClose" title="Close">✕</button>
+  </div>
+
+  <div class="thread" id="thread">
+    <div class="msg assistant">
+      <p>Hey! What are you making today — a post, a sermon slide, a card, a story? Speak the moment. ✦</p>
+    </div>
+    <div class="starters" id="starters">
+      <button class="chip" data-intent="an encouraging post for a friend fighting anxiety before finals">Encouraging post</button>
+      <button class="chip" data-intent="a graduation card about new beginnings for my sister">Graduation card</button>
+      <button class="chip" data-intent="a hype workout story about perseverance for my team">Fitness story</button>
+      <button class="chip" data-intent="a sermon slide on identity for youth night — who God says you are">Sermon slide</button>
+    </div>
+  </div>
+
+  <div class="composer">
+    <textarea id="input" rows="1" placeholder="Tell me what you're creating…"></textarea>
+    <button id="send" class="send" title="Send">✦</button>
+  </div>
+</section>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<footer class="foot" id="foot">
+  Demo of a compose feature built on YouVersion Platform + Gloo AI Studio · styled after <b>MyBibleLens</b> (live on the App Store; the shipped app is a separate private codebase)
 </footer>
 
 <script src="config.js"></script>
