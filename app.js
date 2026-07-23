@@ -1,35 +1,49 @@
-/* Scripture Studio — Infinite Canvas hero.
-   The compose sheet is the doorway; composed verse cards LAND on the living
-   landscape as draggable objects, the way they would inside MyBibleLens.
-
-   Flow: talk ──► /api/compose (Gloo AI: verse + caption + conversational reply)
-              ──► /api/passage (YouVersion: licensed verse text)
-              ──► verse card drops onto the canvas, draggable, exportable.
+/* Scripture Studio — one compose engine, three sanctuary surfaces.
+   Compose (Gloo + YouVersion) is the doorway. What it produces flows into:
+     · Canvas    — verse cards land on a living landscape (draggable)
+     · Sermon Deck — send a verse to build a slide-by-slide message
+     · Reflect   — every composition saves as a reflection to revisit
 */
 
 const $ = (id) => document.getElementById(id);
 const els = {
+  nav: $("nav"),
   canvas: $("canvas"), hint: $("canvasHint"),
+  deck: $("deck"), deckEmpty: $("deckEmpty"), deckStage: $("deckStage"),
+  slide: $("slide"), slidePrev: $("slidePrev"), slideNext: $("slideNext"),
+  slideCounter: $("slideCounter"), deckRail: $("deckRail"), deckCount: $("deckCount"),
+  reflect: $("reflect"), reflectEmpty: $("reflectEmpty"), reflectList: $("reflectList"), reflectCount: $("reflectCount"),
   fab: $("composeFab"), sheet: $("sheet"), scrim: $("scrim"), sheetClose: $("sheetClose"),
   thread: $("thread"), input: $("input"), send: $("send"),
   translation: $("translation"), starters: $("starters"),
 };
 
 const history = [];
+const deck = [];        // [{passage, composed}]
+const reflections = []; // [{intent, passage, composed, reply, time}]
+let deckIndex = 0;
 let cardCount = 0;
 let z = 10;
 
-/* ---------- pre-place a couple of landscape objects (the "living" part) ---------- */
-function seedCanvas() {
-  const note = makeObj(`
-    <span class="note-pin"></span>
-    Youth night — theme:<br><b>"Who God says you are"</b><br>need a verse ✦`, "note");
-  placeObj(note, window.innerWidth * 0.14, window.innerHeight * 0.30, -4);
-
-  const sticker = makeObj("🕊️", "sticker");
-  placeObj(sticker, window.innerWidth * 0.80, window.innerHeight * 0.62, 6);
+/* ============ view switching ============ */
+els.nav.addEventListener("click", (e) => {
+  const btn = e.target.closest(".nav-btn");
+  if (!btn) return;
+  showView(btn.dataset.view);
+});
+function showView(name) {
+  document.querySelectorAll(".view").forEach((v) => { v.hidden = v.dataset.view !== name; });
+  document.querySelectorAll(".nav-btn").forEach((b) => b.classList.toggle("active", b.dataset.view === name));
 }
 
+/* ============ canvas seed objects ============ */
+function seedCanvas() {
+  const note = makeObj(`<span class="note-pin"></span>
+    Youth night — theme:<br><b>"Who God says you are"</b><br>need a verse ✦`, "note");
+  placeObj(note, window.innerWidth * 0.14, window.innerHeight * 0.28, -4);
+  const sticker = makeObj("🕊️", "sticker");
+  placeObj(sticker, window.innerWidth * 0.80, window.innerHeight * 0.60, 6);
+}
 function makeObj(html, cls) {
   const el = document.createElement("div");
   el.className = `obj ${cls}`;
@@ -39,49 +53,47 @@ function makeObj(html, cls) {
   return el;
 }
 function placeObj(el, x, y, rot = 0) {
-  el.style.left = `${x}px`;
-  el.style.top = `${y}px`;
+  el.style.left = `${x}px`; el.style.top = `${y}px`;
   el.style.transform = `rotate(${rot}deg)`;
-  el.dataset.rot = rot;
   el.style.zIndex = ++z;
 }
 
-/* ---------- dragging (pointer events, works on touch + mouse) ---------- */
+/* ============ dragging ============ */
+/* Movement-threshold drag: pointerdown never captures immediately, so a plain
+   click (including on buttons inside the card) always fires. Dragging only
+   begins once the pointer moves past DRAG_THRESHOLD px. */
+const DRAG_THRESHOLD = 5;
 function makeDraggable(el) {
-  let sx, sy, ox, oy, moved;
+  let sx, sy, ox, oy, pending = false, dragging = false, pid = null;
   el.addEventListener("pointerdown", (e) => {
-    if (e.target.closest("button, a, select, textarea")) return; // let controls work
-    moved = false;
+    if (e.target.closest("button, a, select, textarea")) return; // let controls click
     sx = e.clientX; sy = e.clientY;
-    ox = parseFloat(el.style.left) || 0;
-    oy = parseFloat(el.style.top) || 0;
-    el.setPointerCapture(e.pointerId);
-    el.classList.add("dragging");
-    el.style.zIndex = ++z;
+    ox = parseFloat(el.style.left) || 0; oy = parseFloat(el.style.top) || 0;
+    pending = true; dragging = false; pid = e.pointerId;
   });
   el.addEventListener("pointermove", (e) => {
-    if (!el.classList.contains("dragging")) return;
+    if (!pending) return;
     const dx = e.clientX - sx, dy = e.clientY - sy;
-    if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+    if (!dragging) {
+      if (Math.abs(dx) + Math.abs(dy) < DRAG_THRESHOLD) return; // still a click, not a drag
+      dragging = true;
+      el.setPointerCapture(pid);
+      el.classList.add("dragging"); el.style.zIndex = ++z;
+    }
     el.style.left = `${ox + dx}px`;
     el.style.top = `${oy + dy}px`;
   });
-  const end = (e) => {
-    if (!el.classList.contains("dragging")) return;
-    el.classList.remove("dragging");
-    try { el.releasePointerCapture(e.pointerId); } catch {}
+  const end = () => {
+    if (dragging) { el.classList.remove("dragging"); try { el.releasePointerCapture(pid); } catch {} }
+    pending = false; dragging = false; pid = null;
   };
   el.addEventListener("pointerup", end);
   el.addEventListener("pointercancel", end);
 }
 
-/* ---------- compose sheet ---------- */
-function openSheet() {
-  els.sheet.hidden = false; els.scrim.hidden = false;
-  setTimeout(() => els.input.focus(), 100);
-}
+/* ============ compose sheet ============ */
+function openSheet() { els.sheet.hidden = false; els.scrim.hidden = false; setTimeout(() => els.input.focus(), 100); }
 function closeSheet() { els.sheet.hidden = true; els.scrim.hidden = true; }
-
 els.fab.addEventListener("click", openSheet);
 els.sheetClose.addEventListener("click", closeSheet);
 els.scrim.addEventListener("click", closeSheet);
@@ -94,15 +106,12 @@ els.input.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendFlow(); }
 });
 
-/* ---------- the compose flow ---------- */
+/* ============ the compose flow ============ */
 async function sendFlow() {
   const text = els.input.value.trim();
   if (!text || els.send.disabled) return;
-  els.input.value = "";
-  els.send.disabled = true;
-
-  const starters = $("starters");
-  if (starters) starters.remove();
+  els.input.value = ""; els.send.disabled = true;
+  const starters = $("starters"); if (starters) starters.remove();
 
   addMsg("user", text);
   history.push({ role: "user", content: text });
@@ -116,22 +125,21 @@ async function sendFlow() {
     const passage = await api(
       `/api/passage?ref=${encodeURIComponent(composed.reference)}&version=${els.translation.value}`
     );
-
     thinking.remove();
     const reply = composed.reply || `This moment belongs to ${composed.displayRef}.`;
     addMsg("assistant",
-      `${esc(reply)} <span class="ref-pill">${esc(passage.reference)} · ${esc(passage.version)}</span> — dropped on your canvas ↗`,
+      `${esc(reply)} <span class="ref-pill">${esc(passage.reference)} · ${esc(passage.version)}</span> — on your canvas ↗`,
       true);
     history.push({ role: "assistant", content: `${reply} [chose ${composed.displayRef}]` });
 
     dropCardOnCanvas(passage, composed);
+    saveReflection(text, passage, composed, reply);   // every compose → a reflection
   } catch (err) {
     console.error(err);
     thinking.remove();
     addMsg("assistant", "Something drifted — say that again in a moment. ✦");
   } finally {
-    els.send.disabled = false;
-    els.input.focus();
+    els.send.disabled = false; els.input.focus();
   }
 }
 
@@ -146,10 +154,9 @@ function addMsg(cls, content, isHtml = false) {
   return div;
 }
 
-/* ---------- the money shot: card lands on the living landscape ---------- */
+/* ============ surface 1: canvas ============ */
 function dropCardOnCanvas(passage, composed) {
   if (els.hint) { els.hint.style.opacity = "0"; setTimeout(() => els.hint?.remove(), 400); }
-
   const card = document.createElement("div");
   card.className = "obj verse-card";
   card.innerHTML = `
@@ -161,34 +168,78 @@ function dropCardOnCanvas(passage, composed) {
       <button class="ghost primary sermon">＋ Sermon Deck</button>
       <button class="ghost dl">Download</button>
     </div>`;
-
-  // stagger cards across the landscape so they feel organically placed
   const cx = window.innerWidth * (0.40 + (cardCount % 3) * 0.14);
-  const cy = window.innerHeight * (0.22 + (cardCount % 2) * 0.20);
+  const cy = window.innerHeight * (0.16 + (cardCount % 2) * 0.22);
   cardCount++;
   makeDraggable(card);
   els.canvas.appendChild(card);
   placeObj(card, cx, cy, (Math.random() * 4 - 2));
-
   card.querySelector(".dl").addEventListener("click", () => downloadPNG(passage, composed));
   card.querySelector(".sermon").addEventListener("click", (e) => {
-    e.currentTarget.textContent = "✓ Added to Sermon Deck";
+    addToDeck(passage, composed);
+    e.currentTarget.textContent = "✓ In Sermon Deck";
     e.currentTarget.disabled = true;
-    // Sermon Deck view is the next build — this proves the hand-off point.
   });
 }
 
-/* ---------- PNG export (1080x1350, native canvas) ---------- */
+/* ============ surface 2: sermon deck ============ */
+function addToDeck(passage, composed) {
+  deck.push({ passage, composed });
+  deckIndex = deck.length - 1;
+  els.deckCount.hidden = false; els.deckCount.textContent = deck.length;
+  renderDeck();
+}
+function renderDeck() {
+  if (!deck.length) { els.deckEmpty.hidden = false; els.deckStage.hidden = true; return; }
+  els.deckEmpty.hidden = true; els.deckStage.hidden = false;
+  const { passage, composed } = deck[deckIndex];
+  els.slide.innerHTML = `
+    <span class="slide-mark">✦</span>
+    <p class="slide-verse">“${esc(passage.text)}”</p>
+    <p class="slide-ref">${esc(passage.reference)} · ${esc(passage.version)}</p>
+    ${composed.caption ? `<p class="slide-caption">${esc(composed.caption)}</p>` : ""}`;
+  els.slideCounter.textContent = `${deckIndex + 1} / ${deck.length}`;
+  els.deckRail.innerHTML = "";
+  deck.forEach((d, i) => {
+    const t = document.createElement("div");
+    t.className = `deck-thumb ${i === deckIndex ? "active" : ""}`;
+    t.innerHTML = `<div>“${esc(d.passage.text.slice(0, 42))}…”</div><div class="thumb-ref">${esc(d.passage.reference)}</div>`;
+    t.addEventListener("click", () => { deckIndex = i; renderDeck(); });
+    els.deckRail.appendChild(t);
+  });
+}
+els.slidePrev.addEventListener("click", () => { if (deckIndex > 0) { deckIndex--; renderDeck(); } });
+els.slideNext.addEventListener("click", () => { if (deckIndex < deck.length - 1) { deckIndex++; renderDeck(); } });
+
+/* ============ surface 3: reflections ============ */
+function saveReflection(intent, passage, composed, reply) {
+  const time = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  reflections.unshift({ intent, passage, composed, reply, time });
+  els.reflectCount.hidden = false; els.reflectCount.textContent = reflections.length;
+  renderReflections();
+}
+function renderReflections() {
+  if (!reflections.length) { els.reflectEmpty.hidden = false; els.reflectList.innerHTML = ""; return; }
+  els.reflectEmpty.hidden = true;
+  els.reflectList.innerHTML = reflections.map((r) => `
+    <div class="reflection">
+      <p class="r-intent">You were making: <b>${esc(r.intent)}</b></p>
+      <p class="r-verse">“${esc(r.passage.text)}”</p>
+      <p class="r-ref">${esc(r.passage.reference)} · ${esc(r.passage.version)}</p>
+      <p class="r-reply">${esc(r.reply)}</p>
+      <p class="r-time">Saved ${esc(r.time)}</p>
+    </div>`).join("");
+}
+
+/* ============ PNG export ============ */
 function downloadPNG(passage, composed) {
   const W = 1080, H = 1350;
-  const c = document.createElement("canvas");
-  c.width = W; c.height = H;
+  const c = document.createElement("canvas"); c.width = W; c.height = H;
   const x = c.getContext("2d");
   const g = x.createRadialGradient(W * 0.3, H * 0.2, 80, W / 2, H / 2, H);
   g.addColorStop(0, "#fff8f3"); g.addColorStop(1, "#f7ede2");
   x.fillStyle = g; x.fillRect(0, 0, W, H);
-  x.fillStyle = "#b6741d"; x.font = "64px Georgia"; x.textAlign = "center";
-  x.fillText("✦", W / 2, 170);
+  x.fillStyle = "#b6741d"; x.font = "64px Georgia"; x.textAlign = "center"; x.fillText("✦", W / 2, 170);
   x.fillStyle = "#1a1a1a"; x.font = "italic 52px Lora, Georgia";
   const bottom = wrap(x, `“${passage.text}”`, W / 2, 300, W - 240, 74);
   x.fillStyle = "#8f5916"; x.font = "bold 34px Inter, Helvetica";

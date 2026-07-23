@@ -4,17 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Scripture Studio — Scripture in your living landscape</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?b=6">
 </head>
 <body>
 
-<!-- Top bar -->
+<!-- Top bar with view nav -->
 <header class="topbar">
   <div class="brand">
     <span class="brand-mark">✦</span>
     <span class="brand-name">Scripture Studio</span>
-    <span class="brand-sub">Infinite Canvas · a MyBibleLens demo</span>
+    <span class="brand-sub">a MyBibleLens demo</span>
   </div>
+  <nav class="nav" id="nav">
+    <button class="nav-btn active" data-view="canvas">✦ Canvas</button>
+    <button class="nav-btn" data-view="deck">Sermon Deck <span class="nav-count" id="deckCount" hidden>0</span></button>
+    <button class="nav-btn" data-view="reflect">Reflect <span class="nav-count" id="reflectCount" hidden>0</span></button>
+  </nav>
   <div class="topbar-right">
     <select id="translation" class="lang" title="Translation">
       <optgroup label="English">
@@ -31,8 +36,8 @@
   </div>
 </header>
 
-<!-- The living landscape canvas -->
-<main class="canvas" id="canvas">
+<!-- VIEW 1: the living landscape canvas -->
+<main class="canvas view active" id="canvas" data-view="canvas">
   <div class="canvas-hint" id="canvasHint">
     <span class="hint-mark">✦</span>
     <p>This is your Infinite Canvas — a living landscape.</p>
@@ -40,7 +45,39 @@
   </div>
 </main>
 
-<!-- Compose button -->
+<!-- VIEW 2: Sermon Deck -->
+<section class="view deck-view" id="deck" data-view="deck" hidden>
+  <div class="deck-empty" id="deckEmpty">
+    <span class="hint-mark">✎</span>
+    <p>Your Sermon Deck is empty.</p>
+    <p class="hint-sub">Compose a verse, then tap <b>＋ Sermon Deck</b> on the card to build your message — slide by slide.</p>
+  </div>
+  <div class="deck-stage" id="deckStage" hidden>
+    <div class="slide" id="slide"></div>
+    <div class="deck-controls">
+      <button class="ghost" id="slidePrev">‹ Prev</button>
+      <span class="slide-counter" id="slideCounter">1 / 1</span>
+      <button class="ghost" id="slideNext">Next ›</button>
+    </div>
+    <div class="deck-rail" id="deckRail"></div>
+  </div>
+</section>
+
+<!-- VIEW 3: Reflections -->
+<section class="view reflect-view" id="reflect" data-view="reflect" hidden>
+  <div class="reflect-head">
+    <h2>Reflections</h2>
+    <p>Every moment you composed — the intent, the verse, and what the Word spoke into it. Saved to revisit.</p>
+  </div>
+  <div class="reflect-empty" id="reflectEmpty">
+    <span class="hint-mark">☾</span>
+    <p>No reflections yet.</p>
+    <p class="hint-sub">Each time you compose, the conversation is saved here — a quiet record of what you explored.</p>
+  </div>
+  <div class="reflect-list" id="reflectList"></div>
+</section>
+
+<!-- Compose button (always available) -->
 <button class="compose-fab" id="composeFab">
   <span class="fab-mark">✦</span> Compose
 </button>
@@ -50,7 +87,7 @@
   <div class="sheet-head">
     <div>
       <h2>Compose with Scripture</h2>
-      <p>Tell me what you're creating — I'll find the Word that belongs in it, and drop it on your canvas.</p>
+      <p>Tell me what you're creating — I'll find the Word that belongs in it, drop it on your canvas, and save the reflection.</p>
     </div>
     <button class="sheet-close" id="sheetClose" title="Close">✕</button>
   </div>
@@ -80,6 +117,6 @@
 </footer>
 
 <script src="config.js"></script>
-<script src="app.js"></script>
+<script src="app.js?b=6"></script>
 </body>
 </html>
