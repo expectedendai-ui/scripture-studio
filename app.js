@@ -91,6 +91,14 @@ function makeDraggable(el) {
   el.addEventListener("pointercancel", end);
 }
 
+/* ============ info modal ============ */
+const infoBtn = $("infoBtn"), infoModal = $("infoModal"), infoScrim = $("infoScrim"), infoClose = $("infoClose");
+function openInfo() { infoModal.hidden = false; infoScrim.hidden = false; }
+function closeInfo() { infoModal.hidden = true; infoScrim.hidden = true; }
+infoBtn.addEventListener("click", openInfo);
+infoClose.addEventListener("click", closeInfo);
+infoScrim.addEventListener("click", closeInfo);
+
 /* ============ compose sheet ============ */
 function openSheet() { els.sheet.hidden = false; els.scrim.hidden = false; setTimeout(() => els.input.focus(), 100); }
 function closeSheet() { els.sheet.hidden = true; els.scrim.hidden = true; }

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Scripture Studio — Scripture in your living landscape</title>
-<link rel="stylesheet" href="styles.css?b=6">
+<link rel="stylesheet" href="styles.css?b=7">
 </head>
 <body>
 
@@ -32,7 +32,10 @@
       <optgroup label="Português"><option value="BLT">BLT</option></optgroup>
       <optgroup label="中文"><option value="CSBS">CSBS</option></optgroup>
     </select>
-    <span class="powered">powered by <b>YouVersion</b> + <b>Gloo AI</b></span>
+    <a class="link-btn" href="https://mybiblelens.us" target="_blank" rel="noopener" title="Visit MyBibleLens.us">🌐</a>
+    <a class="link-btn" href="https://apps.apple.com/us/app/mybiblelens/id6764069602" target="_blank" rel="noopener" title="Download on the App Store"></a>
+    <span class="soon" title="Android coming soon">Android soon</span>
+    <button class="info-btn" id="infoBtn" title="About this — and the app behind it">?</button>
   </div>
 </header>
 
@@ -112,11 +115,32 @@
 
 <div class="scrim" id="scrim" hidden></div>
 
+<!-- Info modal: the story behind the demo -->
+<div class="info-scrim" id="infoScrim" hidden></div>
+<section class="info-modal" id="infoModal" hidden>
+  <button class="info-close" id="infoClose" title="Close">✕</button>
+  <h2>This is a demo. The app behind it is real — and already shipped.</h2>
+  <p>I'm <b>Denzel</b>. I built <b>MyBibleLens</b> entirely by myself — one person, from a blank page. No team, no investors, no one telling me where to go or how to do it. I taught myself to design it, code it, and ship it, mapping out every piece from scratch. I've been building faith technology for years, following two things: what felt right, and God's word.</p>
+  <p>I had a finished, shipped product <b>live on the Apple App Store</b> before I ever found this challenge. Then I came across YouVersion and Gloo — and I saw exactly where they fit.</p>
+  <p>Because everything you just tried already lives in my app:</p>
+  <ul>
+    <li>The verse landing on the <b>Infinite Canvas</b> — that's my living landscape.</li>
+    <li>Sending it to a <b>Sermon Deck</b> — that's my Sermon Builder.</li>
+    <li>The conversation saving as a <b>Reflection</b> — that's already there too.</li>
+  </ul>
+  <p>This compose feature isn't a bolt-on. It's the natural next frontier of something I've already built, by hand, for real people.</p>
+  <p class="info-status">✦ Live on the Apple App Store since July 2026 · Android coming soon</p>
+  <div class="info-actions">
+    <a class="info-cta" href="https://mybiblelens.us" target="_blank" rel="noopener">Visit MyBibleLens.us →</a>
+    <a class="info-cta ghost-cta" href="https://apps.apple.com/us/app/mybiblelens/id6764069602" target="_blank" rel="noopener"> App Store</a>
+  </div>
+</section>
+
 <footer class="foot" id="foot">
   Demo of a compose feature built on YouVersion Platform + Gloo AI Studio · styled after <b>MyBibleLens</b> (live on the App Store; the shipped app is a separate private codebase)
 </footer>
 
 <script src="config.js"></script>
-<script src="app.js?b=6"></script>
+<script src="app.js?b=7"></script>
 </body>
 </html>
