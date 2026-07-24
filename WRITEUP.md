@@ -18,7 +18,7 @@ Scripture Studio is a conversational compose feature. You speak the moment — *
 - Into a **Sermon Deck** — one tap turns it into a presentation slide.
 - Saved as a **Reflection** — every conversation is kept to revisit.
 
-It works in every language — ask in Spanish and it answers in Spanish, quoting the actual Spanish Bible. This is built for the whole Church, not just English speakers.
+This is what MyBibleLens is built for: helping people experience Scripture not just as words to read, but as a living landscape to explore, connect, and share together. Scripture Studio is how a moment enters that landscape — the Word arriving right where you're already creating.
 
 ## How it works
 
@@ -26,7 +26,7 @@ A static front end talks to a Cloudflare Worker that holds both credentials as s
 
 ## Why it matters — and why it's already real
 
-This isn't a hackathon idea. **MyBibleLens is my app, live on the Apple App Store since July 2026, built entirely by me** — one person, self-taught, from a blank page, guided by what felt right and by God's word. Everything you see here already exists in it: the Infinite Canvas, the Sermon Builder, Reflections. I had a finished, shipped product before I ever found this challenge — then I saw exactly where YouVersion and Gloo fit.
+This isn't a hackathon idea. **MyBibleLens is my app, live on the Apple App Store since July 12, 2026, built entirely by me** — one person, self-taught, from a blank page, guided by what felt right and by God's word. Everything you see here already exists in it: the Infinite Canvas, the Sermon Builder, Reflections. I had a finished, shipped product before I ever found this challenge — then I saw exactly where YouVersion and Gloo fit.
 
 That's the point. The pattern — **intent → faith-tuned reasoning → licensed Scripture → finished asset** — drops into any creative surface: sermon builders, social composers, design tools. I'm building it into MyBibleLens as a canvas-native compose button, so a youth pastor can speak a moment and watch the Word land on their sanctuary canvas.
 
