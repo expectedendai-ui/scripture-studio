@@ -283,6 +283,31 @@ function renderReflections() {
     </div>`).join("");
 }
 
+// pre-seed a few reflections so the Reflect view shows a real history
+function seedReflections() {
+  const seed = [
+    { intent: "an encouraging post for a friend fighting anxiety before finals",
+      text: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which surpasses all understanding, will guard your hearts and your minds in Christ Jesus.",
+      reference: "Philippians 4:6-7", reply: "When anxiety whispers, this is the answer — His peace guards you, even in finals week.", time: "9:14 AM" },
+    { intent: "a sermon slide on identity for youth night — who God says you are",
+      text: "But you are a chosen people, a royal priesthood, a holy nation, God's own possession.",
+      reference: "1 Peter 2:9", reply: "Identity in Christ — chosen and set apart, especially when the world says otherwise.", time: "8:47 AM" },
+    { intent: "a graduation card about new beginnings for my sister",
+      text: "For I know the plans I have for you, declares the LORD, plans to prosper you and not to harm you, plans to give you hope and a future.",
+      reference: "Jeremiah 29:11", reply: "A new chapter deserves a verse about the future — this is the one.", time: "Yesterday" },
+    { intent: "a workout story about perseverance for my team",
+      text: "Let us not grow weary in well-doing, for in due season we will reap a harvest if we do not give up.",
+      reference: "Galatians 6:9", reply: "For the grind — the harvest belongs to the ones who don't quit.", time: "Yesterday" },
+  ];
+  seed.forEach((r) => reflections.push({
+    intent: r.intent, passage: { text: r.text, reference: r.reference, version: "BSB" },
+    composed: { caption: r.reply }, reply: r.reply, time: r.time,
+  }));
+  els.reflectCount.hidden = false;
+  els.reflectCount.textContent = reflections.length;
+  renderReflections();
+}
+
 /* ============ PNG export ============ */
 function downloadPNG(passage, composed) {
   const W = 1080, H = 1350;
@@ -361,3 +386,4 @@ if (toolbar) {
 
 seedCanvas();
 seedDeck();
+seedReflections();
