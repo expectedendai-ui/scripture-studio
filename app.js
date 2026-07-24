@@ -245,6 +245,24 @@ function renderDeck() {
 els.slidePrev.addEventListener("click", () => { if (deckIndex > 0) { deckIndex--; renderDeck(); } });
 els.slideNext.addEventListener("click", () => { if (deckIndex < deck.length - 1) { deckIndex++; renderDeck(); } });
 
+// pre-seed a sermon so the deck shows a real message ("Who God says you are")
+function seedDeck() {
+  const slides = [
+    ["But you are a chosen people, a royal priesthood, a holy nation, God's own possession — to proclaim the virtues of Him who called you out of darkness into His marvelous light.", "1 Peter 2:9", "You are chosen — set apart on purpose."],
+    ["For we are God's handiwork, created in Christ Jesus to do good works, which God prepared in advance for us to do.", "Ephesians 2:10", "You are His handiwork — made with intention."],
+    ["But now, this is what the LORD says: Do not fear, for I have redeemed you; I have called you by name; you are Mine.", "Isaiah 43:1", "Called by name — you belong to Him."],
+    ["See what great love the Father has given us, that we should be called children of God. And that is what we are!", "1 John 3:1", "Not just called — you ARE His child."],
+    ["For I am convinced that neither death nor life, nor anything else in all creation, will be able to separate us from the love of God that is in Christ Jesus our Lord.", "Romans 8:38-39", "Nothing can separate you from His love."],
+  ];
+  slides.forEach(([text, reference, caption]) =>
+    deck.push({ passage: { text, reference, version: "BSB" }, composed: { caption } }),
+  );
+  deckIndex = 0;
+  els.deckCount.hidden = false;
+  els.deckCount.textContent = deck.length;
+  renderDeck();
+}
+
 /* ============ surface 3: reflections ============ */
 function saveReflection(intent, passage, composed, reply) {
   const time = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
@@ -342,3 +360,4 @@ if (toolbar) {
 }
 
 seedCanvas();
+seedDeck();
