@@ -1,29 +1,33 @@
 # Scripture Studio — Scripture inside the creative workflow
 
-**Live demo:** https://scripture-studio.pages.dev · **Code:** https://github.com/expectedendai-ui/scripture-studio · **Video:** (YouTube link TBD)
+**Subtitle:** A compose feature built on the YouVersion Platform + Gloo AI Studio — from the solo founder of MyBibleLens, live on the Apple App Store.
+
+**Live demo:** https://scripture-studio.pages.dev · **Code:** https://github.com/expectedendai-ui/scripture-studio · **Video:** (YouTube link)
+
+---
 
 ## The problem
 
-Billions of moments of creation happen every day — a student making an encouraging post for a stressed friend, a coach hyping his team, a youth leader building slides at midnight. In those moments, Scripture is never present. Not because it doesn't belong there, but because reaching for it means leaving the workflow: open a Bible app, search, copy, paste, lose the moment.
+Billions of people spend their lives creating in digital spaces — posts, stories, slides, art. In all of that creating, Scripture almost never shows up. Not because it doesn't belong there, but because no one built the bridge into the moment itself. Reaching for a verse means leaving your workflow to go search a Bible app. The moment passes.
 
-I know this gap personally. I'm a 22-year-old college student and the solo founder of MyBibleLens, a Bible-study app live on the App Store. My users constantly *make things* — verse art, study canvases, sermon slides. The lesson from shipping that app: people don't need another destination for Scripture. They need Scripture to show up **where they already are, mid-creation.**
+## What it does
 
-## What I built
+Scripture Studio is a conversational compose feature. You speak the moment — *"a sermon slide on identity for youth night — who God says you are"* — and it responds like a creative partner. **Gloo AI Studio** reads the intent and reasons to the verse that genuinely fits (no keyword matching), explaining why. **The YouVersion Platform** delivers the real, licensed text. The verse then lands where you're already working:
 
-Scripture Studio is a conversational creator tool. You talk to it like a friend: *"I'm making a hype workout story for my teammates about not quitting during two-a-days."* Then:
+- On an **Infinite Canvas** — a living landscape where the verse card drops as a draggable object, beside your notes.
+- Into a **Sermon Deck** — one tap turns it into a presentation slide.
+- Saved as a **Reflection** — every conversation is kept to revisit.
 
-1. **Gloo AI Studio** (chat completions, auto-routing) reasons about the moment and chooses one passage that genuinely fits — no keyword matching, no stretching. It replies conversationally and explains why the verse belongs.
-2. **YouVersion Platform API** delivers the real, licensed verse text in the creator's chosen translation — 9 versions across English, Spanish, French, Portuguese, and Chinese.
-3. A finished verse card lands on a canvas gallery — and exports as a 1080×1350 PNG, ready to post.
-
-It's multi-turn: say *"too soft — make it HYPE like a locker room speech"* and Gloo keeps the verse but rewrites the caption in your register. The conversation IS the creative tool. Speak Spanish to it, and it answers — and quotes Reina-Valera — in Spanish.
+It's multilingual: speak Spanish, and it answers and quotes Reina-Valera in Spanish.
 
 ## How it works
 
-Static front end + a Cloudflare Worker proxy. The Worker holds all credentials as secrets (OAuth2 client-credentials flow for Gloo with token caching; YouVersion app key server-side), normalizes verse references (Gloo emits `PHP.4.6-PHP.4.7`; YouVersion wants `PHP.4.6-7`), and caches the Bible-version map across five languages. No keys ever touch the browser or the repo. Every card is real API output — nothing mocked.
+A static front end talks to a Cloudflare Worker that holds both credentials as secrets (OAuth2 client-credentials for Gloo with token caching; the YouVersion app key server-side). The Worker normalizes verse references between the two APIs and caches the version map across five languages. No keys ever touch the browser. Every card is live API output — nothing is mocked; the code is open source.
 
-## Why this matters at scale
+## Why it matters — and why it's already real
 
-This pattern — intent → faith-tuned reasoning → licensed Scripture → finished asset — drops into any creator surface: sticker pickers, sermon builders, social composers, design tools. I'm already building it into MyBibleLens as a canvas-native compose button, where my users will speak a moment and watch the Word land on their sanctuary canvas. The bridge from "billions live where Scripture never shows up" to "Scripture present in the making" is exactly one conversation long.
+This isn't a hackathon idea. **MyBibleLens is my app, live on the Apple App Store since July 2026, built entirely by me** — one person, self-taught, from a blank page, guided by what felt right and by God's word. Everything you see here already exists in it: the Infinite Canvas, the Sermon Builder, Reflections. I had a finished, shipped product before I ever found this challenge — then I saw exactly where YouVersion and Gloo fit.
 
-Built solo in one day on the YouVersion Platform and Gloo AI Studio — because the fastest way to prove Scripture belongs in the creative workflow was to let it compose mine.
+That's the point. The pattern — **intent → faith-tuned reasoning → licensed Scripture → finished asset** — drops into any creative surface: sermon builders, social composers, design tools. I'm building it into MyBibleLens as a canvas-native compose button, so a youth pastor can speak a moment and watch the Word land on their sanctuary canvas.
+
+Scripture didn't make me leave what I was doing. It showed up inside it. That's the bridge — and it's one conversation long.
