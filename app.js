@@ -39,25 +39,35 @@ function showView(name) {
 /* ============ canvas seed objects ============ */
 function seedCanvas() {
   const W = window.innerWidth, H = window.innerHeight;
-  // sticky notes — the "moments" waiting for a verse
-  const notes = [
-    { html: `<span class="note-pin"></span>Youth night — theme:<br><b>"Who God says you are"</b><br>need a verse ✦`, x: 0.11, y: 0.22, rot: -4 },
-    { html: `<span class="note-pin pink"></span>Post for the group chat 🙏<br><b>someone's anxious about finals</b>`, x: 0.30, y: 0.64, rot: 5 },
-    { html: `<span class="note-pin blue"></span>Grad card for my sister 🎓<br><b>new beginnings</b>`, x: 0.60, y: 0.18, rot: 3 },
-  ];
-  notes.forEach((n) => placeObj(makeObj(n.html, "note"), W * n.x, H * n.y, n.rot));
 
-  // real MyBibleLens stickers scattered on the board
-  const stickers = [
-    { s: "renaissance", x: 0.46, y: 0.30, rot: 8 },
-    { s: "goldicon", x: 0.74, y: 0.62, rot: -6 },
-    { s: "afroart", x: 0.19, y: 0.74, rot: 10 },
-    { s: "stainedglass", x: 0.86, y: 0.32, rot: -5 },
-    { s: "holycard", x: 0.52, y: 0.74, rot: 4 },
-    { s: "mosaic", x: 0.68, y: 0.22, rot: -9 },
-  ];
-  stickers.forEach((k) =>
-    placeObj(makeObj(`<img src="assets/stickers/${k.s}.png" alt="">`, "sticker-img"), W * k.x, H * k.y, k.rot),
+  // ✦ The connected cluster — a verse tied to real photos + a moment, with
+  //   gold "thread" connectors. This is how Scripture connects to your life
+  //   on the Infinite Canvas.
+  const cluster = makeObj(`
+    <svg class="c-lines" viewBox="0 0 640 440">
+      <path d="M310,196 Q 195,120 98,92"/>
+      <path d="M310,196 Q 442,112 505,58"/>
+      <path d="M310,196 Q 425,290 497,322"/>
+      <path d="M310,196 Q 195,290 115,335"/>
+      <circle cx="310" cy="196" r="6"/>
+      <circle cx="98" cy="92" r="5"/><circle cx="505" cy="58" r="5"/>
+      <circle cx="497" cy="322" r="5"/><circle cx="115" cy="335" r="5"/>
+    </svg>
+    <div class="c-photo" style="left:22px;top:24px;width:150px"><img src="assets/photos/worship.jpg" alt=""><span class="cap">Sunday service</span></div>
+    <div class="c-note" style="left:432px;top:14px;width:156px"><span class="note-pin"></span>This verse held us<br>together 🙏</div>
+    <div class="c-photo" style="left:420px;top:262px;width:156px"><img src="assets/photos/friends.jpg" alt=""><span class="cap">Small group</span></div>
+    <div class="c-photo" style="left:40px;top:278px;width:150px"><img src="assets/photos/sunset.jpg" alt=""><span class="cap">Camp — last night</span></div>
+    <div class="c-verse" style="left:214px;top:148px;width:192px">
+      <p class="cv-text">"Fear not, for I am with you…"</p>
+      <p class="cv-ref">Isaiah 41:10 · BSB</p>
+    </div>`, "cluster");
+  placeObj(cluster, W * 0.11, H * 0.15, 0);
+
+  // a couple sticky-note "moments" + stickers for life around it
+  placeObj(makeObj(`<span class="note-pin blue"></span>Grad card for my sister 🎓<br><b>new beginnings</b>`, "note"), W * 0.74, H * 0.16, 4);
+  placeObj(makeObj(`<span class="note-pin pink"></span>Post for the group chat 🙏<br><b>someone's anxious</b>`, "note"), W * 0.66, H * 0.62, -5);
+  [["renaissance", 0.9, 0.34, -6], ["mosaic", 0.15, 0.74, 8], ["goldicon", 0.86, 0.72, -5], ["afroart", 0.5, 0.8, 6]].forEach(
+    ([s, x, y, r]) => placeObj(makeObj(`<img src="assets/stickers/${s}.png" alt="">`, "sticker-img"), W * x, H * y, r),
   );
 }
 function makeObj(html, cls) {
