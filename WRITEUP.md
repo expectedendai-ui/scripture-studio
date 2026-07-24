@@ -18,7 +18,7 @@ Scripture Studio is a conversational compose feature. You speak the moment — *
 - Into a **Sermon Deck** — one tap turns it into a presentation slide.
 - Saved as a **Reflection** — every conversation is kept to revisit.
 
-It's multilingual: speak Spanish, and it answers and quotes Reina-Valera in Spanish.
+It works in every language — ask in Spanish and it answers in Spanish, quoting the actual Spanish Bible. This is built for the whole Church, not just English speakers.
 
 ## How it works
 
