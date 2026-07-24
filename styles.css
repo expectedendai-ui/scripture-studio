@@ -344,3 +344,33 @@ body {
 /* colored note pins for variety */
 .note-pin.pink { background: radial-gradient(circle at 35% 30%, #e88ab0, #c65a86); }
 .note-pin.blue { background: radial-gradient(circle at 35% 30%, #7fa8d9, #4a6fb0); }
+
+/* ============ Canvas toolbar (matches MyBibleLens Infinite Canvas) ============ */
+.toolbar {
+  position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 45;
+  display: flex; align-items: center; gap: 3px;
+  padding: 7px 9px; border-radius: 18px;
+  background: rgba(255, 248, 243, 0.92); backdrop-filter: blur(12px);
+  border: 1px solid var(--line);
+  box-shadow: 0 14px 40px rgba(122, 82, 6, 0.24);
+  max-width: calc(100vw - 24px); overflow-x: auto;
+}
+.tool {
+  flex: 0 0 auto; width: 42px; height: 42px; border: none; border-radius: 12px;
+  background: none; cursor: pointer; color: #7a5f3a;
+  display: flex; align-items: center; justify-content: center; transition: background 0.12s, color 0.12s;
+}
+.tool .material-symbols-outlined { font-size: 23px; }
+.tool:hover { background: rgba(182, 116, 29, 0.10); color: var(--gold-deep); }
+.tool.active { background: rgba(182, 116, 29, 0.16); color: var(--gold-deep); }
+/* Compose = the gold hero tool (this is the new frontier button) */
+.tool.compose {
+  width: auto; gap: 7px; padding: 0 16px; color: #fff; font-weight: 700; font-size: 14px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-deep));
+  box-shadow: 0 6px 16px rgba(182, 116, 29, 0.4);
+}
+.tool.compose:hover { filter: brightness(1.05); background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-deep)); }
+.tool.compose .tmark { font-size: 18px; }
+.tool-div { flex: 0 0 auto; width: 1px; height: 26px; background: var(--line); margin: 0 4px; }
+.zoom { flex: 0 0 auto; font-size: 12px; font-weight: 700; color: #9a8a70; padding: 0 8px; }
+@media (max-width: 720px) { .tool.compose .tlabel { display: none; } .tool.compose { padding: 0; width: 42px; justify-content: center; } .zoom { display: none; } }

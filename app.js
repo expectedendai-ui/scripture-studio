@@ -299,4 +299,36 @@ async function api(path, opts = {}) {
   return res.json();
 }
 
+/* ============ toolbar ============ */
+const NEW_NOTE_TEXTS = [
+  `<span class="note-pin"></span>New note ✦`,
+  `<span class="note-pin pink"></span>A moment to remember 🙏`,
+  `<span class="note-pin blue"></span>Verse for this ✦`,
+];
+let noteIdx = 0;
+const toolbar = $("toolbar");
+if (toolbar) {
+  toolbar.addEventListener("click", (e) => {
+    const btn = e.target.closest(".tool[data-tool]");
+    if (!btn) return; // Compose has its own handler
+    const tool = btn.dataset.tool;
+    document.querySelectorAll(".tool[data-tool]").forEach((t) => t.classList.remove("active"));
+    btn.classList.add("active");
+    const W = window.innerWidth, H = window.innerHeight;
+    const rx = () => W * (0.34 + Math.random() * 0.34);
+    const ry = () => H * (0.28 + Math.random() * 0.34);
+    if (tool === "note") {
+      placeObj(makeObj(NEW_NOTE_TEXTS[noteIdx++ % NEW_NOTE_TEXTS.length], "note"), rx(), ry(), Math.random() * 8 - 4);
+    } else if (tool === "stickers") {
+      const set = ["renaissance", "goldicon", "afroart", "stainedglass", "holycard", "mosaic"];
+      const s = set[Math.floor(Math.random() * set.length)];
+      placeObj(makeObj(`<img src="assets/stickers/${s}.png" alt="">`, "sticker-img"), rx(), ry(), Math.random() * 16 - 8);
+    } else if (tool === "verse") {
+      openSheet(); // Verse Stamp → compose a verse
+    }
+    // pencil / highlighter / eraser / lasso / connector / pin / layouts / mosaic / landscapes
+    // stay selected (cosmetic in this demo — fully live in the shipped MyBibleLens app)
+  });
+}
+
 seedCanvas();
