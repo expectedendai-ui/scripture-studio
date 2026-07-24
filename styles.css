@@ -74,7 +74,7 @@ body {
 }
 
 .canvas-hint {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%);
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, 96px);
   text-align: center; color: #a8987e; max-width: 420px; padding: 0 20px;
   transition: opacity 0.4s;
 }
@@ -374,3 +374,9 @@ body {
 .tool-div { flex: 0 0 auto; width: 1px; height: 26px; background: var(--line); margin: 0 4px; }
 .zoom { flex: 0 0 auto; font-size: 12px; font-weight: 700; color: #9a8a70; padding: 0 8px; }
 @media (max-width: 720px) { .tool.compose .tlabel { display: none; } .tool.compose { padding: 0; width: 42px; justify-content: center; } .zoom { display: none; } }
+
+/* centered logo watermark — the Infinite Canvas signature */
+.canvas-logo {
+  position: absolute; top: 44%; left: 50%; transform: translate(-50%, -50%);
+  width: 320px; height: auto; opacity: 0.08; pointer-events: none; z-index: 0;
+}
