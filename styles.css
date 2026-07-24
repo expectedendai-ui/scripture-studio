@@ -336,3 +336,11 @@ body {
 .info-cta.ghost-cta { background: #1a1a1a; }
 
 @media (max-width: 720px) { .soon, .powered { display: none; } }
+
+/* image stickers (real MyBibleLens art) seeded on the canvas */
+.sticker-img { width: 92px; }
+.sticker-img img { width: 100%; height: auto; display: block; pointer-events: none;
+  filter: drop-shadow(0 8px 18px rgba(60,40,12,0.32)); }
+/* colored note pins for variety */
+.note-pin.pink { background: radial-gradient(circle at 35% 30%, #e88ab0, #c65a86); }
+.note-pin.blue { background: radial-gradient(circle at 35% 30%, #7fa8d9, #4a6fb0); }

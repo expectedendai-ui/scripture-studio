@@ -38,11 +38,27 @@ function showView(name) {
 
 /* ============ canvas seed objects ============ */
 function seedCanvas() {
-  const note = makeObj(`<span class="note-pin"></span>
-    Youth night — theme:<br><b>"Who God says you are"</b><br>need a verse ✦`, "note");
-  placeObj(note, window.innerWidth * 0.14, window.innerHeight * 0.28, -4);
-  const sticker = makeObj("🕊️", "sticker");
-  placeObj(sticker, window.innerWidth * 0.80, window.innerHeight * 0.60, 6);
+  const W = window.innerWidth, H = window.innerHeight;
+  // sticky notes — the "moments" waiting for a verse
+  const notes = [
+    { html: `<span class="note-pin"></span>Youth night — theme:<br><b>"Who God says you are"</b><br>need a verse ✦`, x: 0.11, y: 0.22, rot: -4 },
+    { html: `<span class="note-pin pink"></span>Post for the group chat 🙏<br><b>someone's anxious about finals</b>`, x: 0.30, y: 0.64, rot: 5 },
+    { html: `<span class="note-pin blue"></span>Grad card for my sister 🎓<br><b>new beginnings</b>`, x: 0.60, y: 0.18, rot: 3 },
+  ];
+  notes.forEach((n) => placeObj(makeObj(n.html, "note"), W * n.x, H * n.y, n.rot));
+
+  // real MyBibleLens stickers scattered on the board
+  const stickers = [
+    { s: "renaissance", x: 0.46, y: 0.30, rot: 8 },
+    { s: "goldicon", x: 0.74, y: 0.62, rot: -6 },
+    { s: "afroart", x: 0.19, y: 0.74, rot: 10 },
+    { s: "stainedglass", x: 0.86, y: 0.32, rot: -5 },
+    { s: "holycard", x: 0.52, y: 0.74, rot: 4 },
+    { s: "mosaic", x: 0.68, y: 0.22, rot: -9 },
+  ];
+  stickers.forEach((k) =>
+    placeObj(makeObj(`<img src="assets/stickers/${k.s}.png" alt="">`, "sticker-img"), W * k.x, H * k.y, k.rot),
+  );
 }
 function makeObj(html, cls) {
   const el = document.createElement("div");
